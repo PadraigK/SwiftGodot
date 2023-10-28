@@ -450,7 +450,7 @@ func generateBuiltinClasses (values: [JGodotBuiltinClass], outputDir: String?) a
                 conformances.append ("Equatable")
             }
         }
-        conformances.append ("GodotVariant")
+
         if bc.name == "String" || bc.name == "StringName" || bc.name == "NodePath" {
             conformances.append ("ExpressibleByStringLiteral")
         }
@@ -555,8 +555,6 @@ func generateBuiltinClasses (values: [JGodotBuiltinClass], outputDir: String?) a
                 }
             }
             let gtype = gtypeFromTypeName (bc.name)
-            
-            p("public static var gType: Variant.GType { .\(gtype) }")
             
             p ("/// Creates a new instance from the given variant if it contains a \(typeName)")
             // Now generate the variant constructor

@@ -38,8 +38,8 @@ class SwiftSprite: Sprite2D {
     }
     
     @Callable
-    public func computerSimple (_ x: Int, _ y: Int) -> Float {
-        return Float (x + y)
+    public func computerSimple (_ x: Int, _ y: Int) -> Double {
+        return Double (x + y)
     }
     
     @Callable 
@@ -57,8 +57,8 @@ class SwiftSprite: Sprite2D {
     @Export var demo: String = "demo"
     @Export var food: String = "none"
 
-    static func lerp(from: Float, to: Float, weight: Float) -> Float {
-        return Float.unwrap(variant: GD.lerp(from: Variant(from), to: Variant(to), weight: Variant(weight))) ?? 0
+    static func lerp(from: Double, to: Double, weight: Double) -> Double {
+        return Double.unwrap(variant: GD.lerp(from: Variant(from), to: Variant(to), weight: Variant(weight))) ?? 0
     }
     
     var x: Rigid?
@@ -73,7 +73,7 @@ class SwiftSprite: Sprite2D {
         GD.print("Found this value IMAGE: \(imageVariant.gtype) variant: \(imageVariant) desc: \(imageVariant.description)")
         
         let dict2: GDictionary? = GDictionary.unwrap(variant: imageVariant)
-        GD.print("dictionary2: \(String(describing: dict2)) \(dict2?["type"] ?? "no type") \(dict2?["value"] ?? "no value")")
+        GD.print("dictionary2: \(String(describing: dict2)) \(dict2?["type"]?.debugDescription ?? "no type") \(dict2?["value"]?.debugDescription ?? "no value")")
         
         // part b
         if let result = dict2?.get(key: Variant("type"), default: Variant(-1)) {
@@ -155,11 +155,11 @@ class SwiftSprite2: Sprite2D {
     }
     
     func demoGetFavoriteFood (args: [Variant]) -> Variant? {
-        return Variant(stringLiteral: food)
+        return Variant(food)
     }
     
-    static func lerp(from: Float, to: Float, weight: Float) -> Float {
-        return Float.unwrap(variant: GD.lerp(from: Variant(from), to: Variant(to), weight: Variant(weight))) ?? 0
+    static func lerp(from: Double, to: Double, weight: Double) -> Double {
+        return Double.unwrap(variant: GD.lerp(from: Variant(from), to: Variant(to), weight: Variant(weight))) ?? 0
     }
 
 
@@ -170,7 +170,7 @@ class SwiftSprite2: Sprite2D {
         GD.print("Found this value IMAGE: \(imageVariant.gtype) variant: \(imageVariant) desc: \(imageVariant.description)")
         
         let dict2: GDictionary? = GDictionary.unwrap(variant: imageVariant)
-        GD.print("dictionary2: \(String(describing: dict2)) \(dict2?["type"] ?? "no value for type") \(dict2?["value"] ?? "no value for value")")
+        GD.print("dictionary2: \(String(describing: dict2)) \(dict2?["type"]?.debugDescription ?? "no value for type") \(dict2?["value"]?.description ?? "no value for value")")
         
         // part b
         if let result = dict2?.get(key: Variant("type"), default: Variant(-1)) {

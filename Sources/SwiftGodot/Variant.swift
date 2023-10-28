@@ -37,7 +37,7 @@
 ///
 /// Modifications to a container will modify all references to it.
 
-public class Variant: Hashable, Equatable, ExpressibleByStringLiteral, CustomDebugStringConvertible {
+public class Variant: Hashable, Equatable, CustomDebugStringConvertible {
     static var fromTypeMap: [GDExtensionVariantFromTypeConstructorFunc] = {
         var map: [GDExtensionVariantFromTypeConstructorFunc] = []
         
@@ -72,10 +72,8 @@ public class Variant: Hashable, Equatable, ExpressibleByStringLiteral, CustomDeb
     }
     
     /// Creates a nil variant
-    public init (_ value: Nil) {
-        withUnsafeMutablePointer(to: &content) { ptr in
-            gi.variant_new_nil (ptr)
-        }
+    convenience init (_ value: Nil) {
+        self.init()
     }
     
     public init () {
@@ -97,219 +95,43 @@ public class Variant: Hashable, Equatable, ExpressibleByStringLiteral, CustomDeb
     }
     
     public init (_ other: Variant) {
-        let copy = other
-        gi.variant_new_copy (&content, &copy.content)
-    }
-    
-    public init (_ value: Bool) {
-        var v = GDExtensionBool (value ? 1 : 0)
-        Variant.fromTypeMap [GType.bool.rawValue] (&content, &v)
-   }
-    
-    public init (_ value: Int) {
-        var v = GDExtensionInt(value)
-        Variant.fromTypeMap [GType.int.rawValue] (&content, &v)
-    }
-
-    public init (_ value: Int64) {
-        var v = GDExtensionInt(Int(value))
-        Variant.fromTypeMap [GType.int.rawValue] (&content, &v)
-    }
-
-    public init (_ value: String) {
-        let gstring = GString (stringLiteral: value)
-        
-        Variant.fromTypeMap [GType.string.rawValue] (&content, &gstring.content)
-    }
-    
-    public required init(stringLiteral: String) {
-        let gstring = GString (stringLiteral: stringLiteral)
-        
-        Variant.fromTypeMap [GType.string.rawValue] (&content, &gstring.content)
-    }
-
-    public init (_ value: Float) {
-        var v = Double (value)
-        Variant.fromTypeMap [GType.float.rawValue] (&content, &v)
-    }
-
-    public init (_ value: Double) {
-        var v = Double (value)
-        Variant.fromTypeMap [GType.float.rawValue] (&content, &v)
-    }
-
-    public init (_ value: GString) {
-        withUnsafeMutablePointer(to: &value.content) { ptr in
-            Variant.fromTypeMap [GType.string.rawValue] (&content, ptr)
-        }
-    }
-    
-    public init (_ value: Vector2) {
-        var v = value
-        Variant.fromTypeMap [GType.vector2.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: Vector2i) {
-        var v = value
-        Variant.fromTypeMap [GType.vector2i.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: Rect2) {
-        var v = value
-        Variant.fromTypeMap [GType.rect2.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: Rect2i) {
-        var v = value
-        Variant.fromTypeMap [GType.rect2i.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: Vector3) {
-        var v = value
-        Variant.fromTypeMap [GType.vector3.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: Vector3i) {
-        var v = value
-        Variant.fromTypeMap [GType.vector3i.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: Transform2D) {
-        var v = value
-        Variant.fromTypeMap [GType.transform2d.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: Vector4) {
-        var v = value
-        Variant.fromTypeMap [GType.vector4.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: Vector4i) {
-        var v = value
-        Variant.fromTypeMap [GType.vector4i.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: Plane) {
-        var v = value
-        Variant.fromTypeMap [GType.plane.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: Quaternion) {
-        var v = value
-        Variant.fromTypeMap [GType.quaternion.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: AABB) {
-        var v = value
-        Variant.fromTypeMap [GType.aabb.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: Basis) {
-        var v = value
-        Variant.fromTypeMap [GType.basis.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: Transform3D) {
-        var v = value
-        Variant.fromTypeMap [GType.transform3d.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: Projection) {
-        var v = value
-        Variant.fromTypeMap [GType.projection.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: Color) {
-        var v = value
-        Variant.fromTypeMap [GType.color.rawValue] (&content, &v)
-    }
-    
-    public init (_ value: StringName) {
-        Variant.fromTypeMap [GType.stringName.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: NodePath) {
-        Variant.fromTypeMap [GType.nodePath.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: RID) {
-        Variant.fromTypeMap [GType.rid.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: Object?) {
-        guard let value else {
-            withUnsafeMutablePointer(to: &content) { ptr in
-                gi.variant_new_nil (ptr)
-            }
-            return
-        }
-        var copy = value.handle
+        var copy = other.content
         withUnsafeMutablePointer(to: &content) { selfPtr in
-            withUnsafeMutablePointer(to: &copy) { handlePtr in
-                Variant.fromTypeMap [GType.object.rawValue] (selfPtr, handlePtr)
+            withUnsafeMutablePointer(to: &copy) { ptr in
+                gi.variant_new_copy (selfPtr, ptr)
+            }
+        }
+    }
+    
+    public init (_ value: some VariantRepresentable) {
+        let godotType = type(of: value).godotType
+        
+        var mutableValue: Any
+        
+        if let object = value as? Object {
+            mutableValue = object.handle
+        } else if let contentStoring = value as? (any ContentTypeStoring) {
+            mutableValue = contentStoring.content
+        } else {
+            mutableValue = value
+        }
+        
+        withUnsafeMutablePointer(to: &content) { selfPtr in
+            withUnsafeMutablePointer(to: &mutableValue) { ptr in
+                Variant.fromTypeMap [godotType.rawValue] (selfPtr, ptr)
             }
         }
     }
 
-    public init (_ value: Callable) {
-        Variant.fromTypeMap [GType.callable.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: Signal) {
-        Variant.fromTypeMap [GType.signal.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: GDictionary) {
-        Variant.fromTypeMap [GType.dictionary.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: GArray) {
-        Variant.fromTypeMap [GType.array.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: PackedByteArray) {
-        Variant.fromTypeMap [GType.packedByteArray.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: PackedInt32Array) {
-        Variant.fromTypeMap [GType.packedInt32Array.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: PackedInt64Array) {
-        Variant.fromTypeMap [GType.packedInt64Array.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: PackedFloat32Array) {
-        Variant.fromTypeMap [GType.packedFloat32Array.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: PackedFloat64Array) {
-        Variant.fromTypeMap [GType.packedFloat64Array.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: PackedStringArray) {
-        Variant.fromTypeMap [GType.packedStringArray.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: PackedVector2Array) {
-        Variant.fromTypeMap [GType.packedVector2Array.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: PackedVector3Array) {
-        Variant.fromTypeMap [GType.packedVector3Array.rawValue] (&content, &value.content)
-    }
-    
-    public init (_ value: PackedColorArray) {
-        Variant.fromTypeMap [GType.packedColorArray.rawValue] (&content, &value.content)
-    }
-    
     public var gtype: GType {
         var copy = content
         return GType (rawValue: Int (gi.variant_get_type (&copy).rawValue)) ?? .nil
     }
     
     func toType (_ type: GType, dest: UnsafeMutableRawPointer) {
-        Variant.toTypeMap [type.rawValue] (dest, &content)
+        withUnsafeMutablePointer(to: &content) { selfPtr in
+            Variant.toTypeMap [type.rawValue] (dest, selfPtr)
+        }
     }
     
     ///
@@ -350,7 +172,7 @@ extension Int: GodotVariant {
         return value
     }
     
-    public func toVariant () -> Variant { .init(self) }
+    public func toVariant () -> Variant { .init(Int64(self)) }
 }
 
 extension Int64: GodotVariant {
@@ -363,7 +185,7 @@ extension Int64: GodotVariant {
         return value
     }
     
-    public func toVariant () -> Variant { .init(Int(self)) }
+    public func toVariant () -> Variant { .init(self) }
 }
 
 extension Bool: GodotVariant {
@@ -380,21 +202,8 @@ extension Bool: GodotVariant {
     public func toVariant () -> Variant { .init(self) }
 }
 
-extension Float: GodotVariant {
-    public static var gType: Variant.GType { .float }
-    
-    /// Creates a new instance from the given variant if it contains a float
-    public static func unwrap(variant: Variant) -> Self? {
-        guard variant.gtype == gType else { return nil }
-        var value: Double = .init()
-        variant.toType(gType, dest: &value)
-        return Float(value)
-    }
-
-    public func toVariant () -> Variant { .init(self) }
-}
-
 extension Double: GodotVariant {
+    // Confusing, but godot's floats are Doubles
     public static var gType: Variant.GType { .float }
     
     /// Creates a new instance from the given variant if it contains a float
@@ -406,5 +215,7 @@ extension Double: GodotVariant {
         return value
     }
     
-    public func toVariant() -> Variant { .init(Float(self)) }
+    public func toVariant() -> Variant { .init(self) }
 }
+
+

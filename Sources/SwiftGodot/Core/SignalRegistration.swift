@@ -18,7 +18,7 @@ public struct SignalWithNoArguments {
 
 /// Describes a signal and its arguments.
 /// - note: It is recommended to use the #signal macro instead of using this directly.
-public struct SignalWith1Argument<Argument: GodotVariant> {
+public struct SignalWith1Argument<Argument: VariantRepresentable> {
     public let name: StringName
     public let arguments: [PropInfo]
     
@@ -36,8 +36,8 @@ public struct SignalWith1Argument<Argument: GodotVariant> {
 /// Describes a signal and its arguments.
 /// - note: It is recommended to use the #signal macro instead of using this directly.
 public struct SignalWith2Arguments<
-    Argument1: GodotVariant,
-    Argument2: GodotVariant
+    Argument1: VariantRepresentable,
+    Argument2: VariantRepresentable
 > {
     public let name: StringName
     public let arguments: [PropInfo]
@@ -58,9 +58,9 @@ public struct SignalWith2Arguments<
 /// Describes a signal and its arguments.
 /// - note: It is recommended to use the #signal macro instead of using this directly.
 public struct SignalWith3Arguments<
-    Argument1: GodotVariant,
-    Argument2: GodotVariant,
-    Argument3: GodotVariant
+    Argument1: VariantRepresentable,
+    Argument2: VariantRepresentable,
+    Argument3: VariantRepresentable
 > {
     public let name: StringName
     public let arguments: [PropInfo]
@@ -83,10 +83,10 @@ public struct SignalWith3Arguments<
 /// Describes a signal and its arguments.
 /// - note: It is recommended to use the #signal macro instead of using this directly.
 public struct SignalWith4Arguments<
-    Argument1: GodotVariant,
-    Argument2: GodotVariant,
-    Argument3: GodotVariant,
-    Argument4: GodotVariant
+    Argument1: VariantRepresentable,
+    Argument2: VariantRepresentable,
+    Argument3: VariantRepresentable,
+    Argument4: VariantRepresentable
 > {
     public let name: StringName
     public let arguments: [PropInfo]
@@ -111,11 +111,11 @@ public struct SignalWith4Arguments<
 /// Describes a signal and its arguments.
 /// - note: It is recommended to use the #signal macro instead of using this directly.
 public struct SignalWith5Arguments<
-    Argument1: GodotVariant,
-    Argument2: GodotVariant,
-    Argument3: GodotVariant,
-    Argument4: GodotVariant,
-    Argument5: GodotVariant
+    Argument1: VariantRepresentable,
+    Argument2: VariantRepresentable,
+    Argument3: VariantRepresentable,
+    Argument4: VariantRepresentable,
+    Argument5: VariantRepresentable
 > {
     public let name: StringName
     public let arguments: [PropInfo]
@@ -142,12 +142,12 @@ public struct SignalWith5Arguments<
 /// Describes a signal and its arguments.
 /// - note: It is recommended to use the #signal macro instead of using this directly.
 public struct SignalWith6Arguments<
-    Argument1: GodotVariant,
-    Argument2: GodotVariant,
-    Argument3: GodotVariant,
-    Argument4: GodotVariant,
-    Argument5: GodotVariant,
-    Argument6: GodotVariant
+    Argument1: VariantRepresentable,
+    Argument2: VariantRepresentable,
+    Argument3: VariantRepresentable,
+    Argument4: VariantRepresentable,
+    Argument5: VariantRepresentable,
+    Argument6: VariantRepresentable
 > {
     public let name: StringName
     public let arguments: [PropInfo]
@@ -197,8 +197,8 @@ public extension Object {
     /// The argument must match the type of the argument at that position in the signal.
     ///  - Example: emit(signal: Player.scored, 12)
     @discardableResult
-    func emit<A: GodotVariant>(signal: SignalWith1Argument<A>, _ argument: A) -> GodotError {
-        emitSignal(signal.name, argument.toVariant())
+    func emit<A: VariantRepresentable>(signal: SignalWith1Argument<A>, _ argument: A) -> GodotError {
+        emitSignal(signal.name, Variant(argument))
     }
 
     /// Connects a signal to a callable method
@@ -216,12 +216,12 @@ public extension Object {
     /// The argument must match the type of the argument at that position in the signal.
     ///  - Example: emit(signal: Player.scored, 12, "hooray")
     @discardableResult
-    func emit<A: GodotVariant, B: GodotVariant>(
+    func emit<A: VariantRepresentable, B: VariantRepresentable>(
         signal: SignalWith2Arguments<A, B>,
         _ argument1: A,
         _ argument2: B
     ) -> GodotError {
-        emitSignal(signal.name, argument1.toVariant(), argument2.toVariant())
+        emitSignal(signal.name, Variant(argument1), Variant(argument2))
     }
 
     /// Connects a signal to a callable method
@@ -239,13 +239,13 @@ public extension Object {
     /// The argument must match the type of the argument at that position in the signal.
     ///  - Example: emit(signal: Player.scored, 12, "hooray", self)
     @discardableResult
-    func emit<A: GodotVariant, B: GodotVariant, C: GodotVariant>(
+    func emit<A: VariantRepresentable, B: VariantRepresentable, C: VariantRepresentable>(
         signal: SignalWith3Arguments<A, B, C>,
         _ argument1: A,
         _ argument2: B,
         _ argument3: C
     ) -> GodotError {
-        emitSignal(signal.name, argument1.toVariant(), argument2.toVariant(), argument3.toVariant())
+        emitSignal(signal.name, Variant(argument1), Variant(argument2), Variant(argument3))
     }
 
     /// Connects a signal to a callable method
@@ -267,7 +267,7 @@ public extension Object {
     /// The argument must match the type of the argument at that position in the signal.
     ///  - Example: emit(signal: Player.scored, 12, "hooray", self, 4)
     @discardableResult
-    func emit<A: GodotVariant, B: GodotVariant, C: GodotVariant, D: GodotVariant>(
+    func emit<A: VariantRepresentable, B: VariantRepresentable, C: VariantRepresentable, D: VariantRepresentable>(
         signal: SignalWith4Arguments<A, B, C, D>,
         _ argument1: A,
         _ argument2: B,
@@ -276,10 +276,10 @@ public extension Object {
     ) -> GodotError {
         emitSignal(
             signal.name,
-            argument1.toVariant(),
-            argument2.toVariant(),
-            argument3.toVariant(),
-            argument4.toVariant()
+            Variant(argument1),
+            Variant(argument2),
+            Variant(argument3),
+            Variant(argument4)
         )
     }
 
@@ -302,7 +302,7 @@ public extension Object {
     /// The argument must match the type of the argument at that position in the signal.
     ///  - Example: emit(signal: Player.scored, 12, "hooray", self, 4, "another_one")
     @discardableResult
-    func emit<A: GodotVariant, B: GodotVariant, C: GodotVariant, D: GodotVariant, E: GodotVariant>(
+    func emit<A: VariantRepresentable, B: VariantRepresentable, C: VariantRepresentable, D: VariantRepresentable, E: VariantRepresentable>(
         signal: SignalWith5Arguments<A, B, C, D, E>,
         _ argument1: A,
         _ argument2: B,
@@ -312,11 +312,11 @@ public extension Object {
     ) -> GodotError {
         emitSignal(
             signal.name,
-            argument1.toVariant(),
-            argument2.toVariant(),
-            argument3.toVariant(),
-            argument4.toVariant(),
-            argument5.toVariant()
+            Variant(argument1),
+            Variant(argument2),
+            Variant(argument3),
+            Variant(argument4),
+            Variant(argument5)
         )
     }
 
@@ -339,7 +339,7 @@ public extension Object {
     /// The argument must match the type of the argument at that position in the signal.
     ///  - Example: emit(signal: Player.scored, 12, "hooray", self, 4, reason)
     @discardableResult
-    func emit<A: GodotVariant, B: GodotVariant, C: GodotVariant, D: GodotVariant, E: GodotVariant, F: GodotVariant>(
+    func emit<A: VariantRepresentable, B: VariantRepresentable, C: VariantRepresentable, D: VariantRepresentable, E: VariantRepresentable, F: VariantRepresentable>(
         signal: SignalWith6Arguments<A, B, C, D, E, F>,
         _ argument1: A,
         _ argument2: B,
@@ -350,12 +350,12 @@ public extension Object {
     ) -> GodotError {
         emitSignal(
             signal.name,
-            argument1.toVariant(),
-            argument2.toVariant(),
-            argument3.toVariant(),
-            argument4.toVariant(),
-            argument5.toVariant(),
-            argument6.toVariant()
+            Variant(argument1),
+            Variant(argument2),
+            Variant(argument3),
+            Variant(argument4),
+            Variant(argument5),
+            Variant(argument6)
         )
     }
 
@@ -377,13 +377,13 @@ public extension Object {
 
 private extension PropInfo {
     init(
-        propertyType: (some GodotVariant).Type,
+        propertyType: (some VariantRepresentable).Type,
         propertyName: StringName
     ) {
         self.init(
-            propertyType: propertyType.gType,
+            propertyType: propertyType.godotType,
             propertyName: propertyName,
-            className: propertyType.gType == .object ? .init(String(describing: propertyType.self)) : "",
+            className: propertyType.godotType == .object ? .init(String(describing: propertyType.self)) : "",
             hint: .none,
             hintStr: "",
             usage: .default
