@@ -18,7 +18,7 @@ public struct SignalWithNoArguments {
 
 /// Describes a signal and its arguments.
 /// - note: It is recommended to use the #signal macro instead of using this directly.
-public struct SignalWith1Argument<Argument: VariantRepresentable> {
+public struct SignalWith1Argument<Argument: VariantStorable> {
     public let name: StringName
     public let arguments: [PropInfo]
     
@@ -36,8 +36,8 @@ public struct SignalWith1Argument<Argument: VariantRepresentable> {
 /// Describes a signal and its arguments.
 /// - note: It is recommended to use the #signal macro instead of using this directly.
 public struct SignalWith2Arguments<
-    Argument1: VariantRepresentable,
-    Argument2: VariantRepresentable
+    Argument1: VariantStorable,
+    Argument2: VariantStorable
 > {
     public let name: StringName
     public let arguments: [PropInfo]
@@ -58,9 +58,9 @@ public struct SignalWith2Arguments<
 /// Describes a signal and its arguments.
 /// - note: It is recommended to use the #signal macro instead of using this directly.
 public struct SignalWith3Arguments<
-    Argument1: VariantRepresentable,
-    Argument2: VariantRepresentable,
-    Argument3: VariantRepresentable
+    Argument1: VariantStorable,
+    Argument2: VariantStorable,
+    Argument3: VariantStorable
 > {
     public let name: StringName
     public let arguments: [PropInfo]
@@ -83,10 +83,10 @@ public struct SignalWith3Arguments<
 /// Describes a signal and its arguments.
 /// - note: It is recommended to use the #signal macro instead of using this directly.
 public struct SignalWith4Arguments<
-    Argument1: VariantRepresentable,
-    Argument2: VariantRepresentable,
-    Argument3: VariantRepresentable,
-    Argument4: VariantRepresentable
+    Argument1: VariantStorable,
+    Argument2: VariantStorable,
+    Argument3: VariantStorable,
+    Argument4: VariantStorable
 > {
     public let name: StringName
     public let arguments: [PropInfo]
@@ -111,11 +111,11 @@ public struct SignalWith4Arguments<
 /// Describes a signal and its arguments.
 /// - note: It is recommended to use the #signal macro instead of using this directly.
 public struct SignalWith5Arguments<
-    Argument1: VariantRepresentable,
-    Argument2: VariantRepresentable,
-    Argument3: VariantRepresentable,
-    Argument4: VariantRepresentable,
-    Argument5: VariantRepresentable
+    Argument1: VariantStorable,
+    Argument2: VariantStorable,
+    Argument3: VariantStorable,
+    Argument4: VariantStorable,
+    Argument5: VariantStorable
 > {
     public let name: StringName
     public let arguments: [PropInfo]
@@ -142,12 +142,12 @@ public struct SignalWith5Arguments<
 /// Describes a signal and its arguments.
 /// - note: It is recommended to use the #signal macro instead of using this directly.
 public struct SignalWith6Arguments<
-    Argument1: VariantRepresentable,
-    Argument2: VariantRepresentable,
-    Argument3: VariantRepresentable,
-    Argument4: VariantRepresentable,
-    Argument5: VariantRepresentable,
-    Argument6: VariantRepresentable
+    Argument1: VariantStorable,
+    Argument2: VariantStorable,
+    Argument3: VariantStorable,
+    Argument4: VariantStorable,
+    Argument5: VariantStorable,
+    Argument6: VariantStorable
 > {
     public let name: StringName
     public let arguments: [PropInfo]
@@ -197,7 +197,7 @@ public extension Object {
     /// The argument must match the type of the argument at that position in the signal.
     ///  - Example: emit(signal: Player.scored, 12)
     @discardableResult
-    func emit<A: VariantRepresentable>(signal: SignalWith1Argument<A>, _ argument: A) -> GodotError {
+    func emit<A: VariantStorable>(signal: SignalWith1Argument<A>, _ argument: A) -> GodotError {
         emitSignal(signal.name, .init(argument))
     }
 
@@ -216,7 +216,7 @@ public extension Object {
     /// The argument must match the type of the argument at that position in the signal.
     ///  - Example: emit(signal: Player.scored, 12, "hooray")
     @discardableResult
-    func emit<A: VariantRepresentable, B: VariantRepresentable>(
+    func emit<A: VariantStorable, B: VariantStorable>(
         signal: SignalWith2Arguments<A, B>,
         _ argument1: A,
         _ argument2: B
@@ -239,7 +239,7 @@ public extension Object {
     /// The argument must match the type of the argument at that position in the signal.
     ///  - Example: emit(signal: Player.scored, 12, "hooray", self)
     @discardableResult
-    func emit<A: VariantRepresentable, B: VariantRepresentable, C: VariantRepresentable>(
+    func emit<A: VariantStorable, B: VariantStorable, C: VariantStorable>(
         signal: SignalWith3Arguments<A, B, C>,
         _ argument1: A,
         _ argument2: B,
@@ -267,7 +267,7 @@ public extension Object {
     /// The argument must match the type of the argument at that position in the signal.
     ///  - Example: emit(signal: Player.scored, 12, "hooray", self, 4)
     @discardableResult
-    func emit<A: VariantRepresentable, B: VariantRepresentable, C: VariantRepresentable, D: VariantRepresentable>(
+    func emit<A: VariantStorable, B: VariantStorable, C: VariantStorable, D: VariantStorable>(
         signal: SignalWith4Arguments<A, B, C, D>,
         _ argument1: A,
         _ argument2: B,
@@ -302,7 +302,7 @@ public extension Object {
     /// The argument must match the type of the argument at that position in the signal.
     ///  - Example: emit(signal: Player.scored, 12, "hooray", self, 4, "another_one")
     @discardableResult
-    func emit<A: VariantRepresentable, B: VariantRepresentable, C: VariantRepresentable, D: VariantRepresentable, E: VariantRepresentable>(
+    func emit<A: VariantStorable, B: VariantStorable, C: VariantStorable, D: VariantStorable, E: VariantStorable>(
         signal: SignalWith5Arguments<A, B, C, D, E>,
         _ argument1: A,
         _ argument2: B,
@@ -339,7 +339,7 @@ public extension Object {
     /// The argument must match the type of the argument at that position in the signal.
     ///  - Example: emit(signal: Player.scored, 12, "hooray", self, 4, reason)
     @discardableResult
-    func emit<A: VariantRepresentable, B: VariantRepresentable, C: VariantRepresentable, D: VariantRepresentable, E: VariantRepresentable, F: VariantRepresentable>(
+    func emit<A: VariantStorable, B: VariantStorable, C: VariantStorable, D: VariantStorable, E: VariantStorable, F: VariantStorable>(
         signal: SignalWith6Arguments<A, B, C, D, E, F>,
         _ argument1: A,
         _ argument2: B,
@@ -377,7 +377,7 @@ public extension Object {
 
 private extension PropInfo {
     init(
-        propertyType: (some VariantRepresentable).Type,
+        propertyType: (some VariantStorable).Type,
         propertyName: StringName
     ) {
         self.init(
