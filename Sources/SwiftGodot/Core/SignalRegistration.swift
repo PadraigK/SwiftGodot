@@ -381,9 +381,9 @@ private extension PropInfo {
         propertyName: StringName
     ) {
         self.init(
-            propertyType: propertyType.godotType,
+            propertyType: propertyType.Representable.godotType,
             propertyName: propertyName,
-            className: propertyType.godotType == .object ? .init(String(describing: propertyType.self)) : "",
+            className: propertyType.Representable.godotType == .object ? .init(String(describing: propertyType.self)) : "",
             hint: .none,
             hintStr: "",
             usage: .default
