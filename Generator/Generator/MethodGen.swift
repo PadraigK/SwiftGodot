@@ -386,16 +386,16 @@ func methodGen (_ p: Printer, method: MethodDefinition, className: String, cdef:
         // We can modularize this by creating functions that generate the return type and return
         // statements.
 
-#if os(Windows)
+//#if os(Windows)
         // Workaround for: https://github.com/migueldeicaza/SwiftGodot/issues/299
         builder.setup = "#if false\n\n"
-#else
-        if method.isVararg {
-            builder.setup = "#if false\n\n"
-        } else {
-            builder.setup = "#if true\n\n"
-        }
-#endif
+//#else
+//        if method.isVararg {
+//            builder.setup = "#if false\n\n"
+//        } else {
+//            builder.setup = "#if true\n\n"
+//        }
+//#endif
         builder.setup += argSetup
         // Use implicit bridging to build _args array of type [UnsafeMutableRawPointer?]. This preserves the
         // values of the parameters, because they are treated as inout parameters. Then cast to [UnsafeRawPointer?],

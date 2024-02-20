@@ -10,8 +10,8 @@ import ExtensionApi
 
 var args = CommandLine.arguments
 
-let jsonFile = args.count > 1 ? args [1] : "/Users/miguel/cvs/godot-master/extension_api.json"
-var generatorOutput = args.count > 2 ? args [2] : "/Users/miguel/cvs/SwiftGodot-DEBUG"
+let jsonFile = args.count > 1 ? args [1] : "/Users/padraig/code/SwiftGodot/Sources/ExtensionApi/extension_api.json"
+var generatorOutput = args.count > 2 ? args [2] : "/Users/padraig/code/SwiftGodotLite/Sources/SwiftGodotLite/codegen"
 var docRoot =  args.count > 3 ? args [3] : "/Users/miguel/cvs/godot-master/doc"
 let outputDir = args.count > 2 ? args [2] : generatorOutput
 let generateResettableCache = false 
